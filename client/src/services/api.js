@@ -209,6 +209,14 @@ export const api = {
     return res.json();
   },
 
+  getFeedbackAnalytics: async (trainerId, courseId) => {
+    const query = new URLSearchParams();
+    if (trainerId) query.append('trainerId', trainerId);
+    if (courseId) query.append('courseId', courseId);
+    const res = await fetch(`${API_BASE}/feedback/analytics?${query.toString()}`);
+    return res.json();
+  },
+
   submitFeedback: async (feedbackData) => {
     const res = await fetch(`${API_BASE}/feedback`, {
       method: 'POST',
