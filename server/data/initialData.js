@@ -1,0 +1,714 @@
+export const initialData = {
+  users: [
+    {
+      id: "usr-trainee-1",
+      name: "Ananya Sharma",
+      email: "ananya.sharma@imd.gov.in",
+      password: "password123",
+      role: "trainee",
+      organization: "India Meteorological Department (IMD)",
+      department: "National Weather Forecasting Centre (NWFC)",
+      designation: "Scientific Assistant",
+      status: "active",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
+      joinedAt: "2025-06-15",
+      profile: {
+        qualifications: [
+          { degree: "M.Sc. Atmospheric Sciences", institute: "Cochin University of Science and Technology (CUSAT)", year: "2024", grade: "9.2 CGPA" },
+          { degree: "B.Sc. Physics (Honors)", institute: "Delhi University", year: "2022", grade: "8.8 CGPA" }
+        ],
+        workExperience: [
+          { role: "Scientific Assistant", organization: "IMD New Delhi", period: "2024 - Present", description: "Operational synoptic weather monitoring, radar image interpretation, and aviation weather briefing." },
+          { role: "Research Intern", organization: "Indian Institute of Tropical Meteorology (IITM)", period: "Jan 2024 - Jun 2024", description: "Monsoon boundary layer turbulence data analysis." }
+        ],
+        interests: ["Doppler Weather Radar", "Severe Storm Nowcasting", "WRF Numerical Modeling", "Machine Learning in Meteorology"],
+        skills: [
+          { name: "Doppler Radar Interpretation", level: 85 },
+          { name: "Python for Atmospheric Science", level: 90 },
+          { name: "Synoptic Chart Analysis", level: 80 },
+          { name: "WRF Model Configuration", level: 65 },
+          { name: "Satellite Imagery Analysis", level: 75 }
+        ],
+        bio: "Dedicated meteorological researcher and operational forecaster specializing in mesoscale weather events and radar-based thunderstorm nowcasting at IMD."
+      }
+    },
+    {
+      id: "usr-trainer-1",
+      name: "Dr. Rajeshwar Rao",
+      email: "rajeshwar.rao@imd.gov.in",
+      password: "password123",
+      role: "trainer",
+      organization: "India Meteorological Department (IMD)",
+      department: "Radar & Instrumentation Division, IMD Pune",
+      designation: "Scientist 'F' / Senior Director",
+      status: "active",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      joinedAt: "2023-01-10",
+      profile: {
+        qualifications: [
+          { degree: "Ph.D. Radar Meteorology", institute: "Indian Institute of Technology (IIT) Kharagpur", year: "2008" },
+          { degree: "M.Tech Remote Sensing", institute: "Anna University", year: "2003" }
+        ],
+        workExperience: [
+          { role: "Scientist 'F'", organization: "IMD Pune", period: "2018 - Present", description: "Lead trainer for DWR operationalization and national radar network modernization." },
+          { role: "Scientist 'E'", organization: "IMD Chennai DWR Station", period: "2010 - 2018", description: "Cyclone detection and operational radar calibration." }
+        ],
+        specialization: ["Doppler Weather Radar", "Severe Convective Systems", "Dual-Polarization Algorithms", "Quantitative Precipitation Estimation (QPE)"],
+        publicationsCount: 38,
+        yearsOfExperience: 22,
+        rating: 4.9,
+        bio: "Senior Radar Meteorologist with 20+ years commissioning dual-polarimetric Doppler radars across India and leading national capacity-building programs."
+      }
+    },
+    {
+      id: "usr-trainer-2",
+      name: "Dr. Priya Nair",
+      email: "priya.nair@imd.gov.in",
+      password: "password123",
+      role: "trainer",
+      organization: "India Meteorological Department (IMD)",
+      department: "Satellite Meteorology Division, New Delhi",
+      designation: "Scientist 'E'",
+      status: "active",
+      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
+      joinedAt: "2023-05-12",
+      profile: {
+        qualifications: [
+          { degree: "Ph.D. Satellite Meteorology", institute: "Space Applications Centre (ISRO) & Gujarat Univ", year: "2012" }
+        ],
+        specialization: ["Satellite Remote Sensing", "INSAT-3D/3DR Payloads", "Cyclone Intensity Estimation (Dvorak Technique)"],
+        publicationsCount: 24,
+        yearsOfExperience: 16,
+        rating: 4.8,
+        bio: "Expert in geostationary meteorological satellite payloads and rapid-scan imagery interpretation for severe tropical cyclones."
+      }
+    },
+    {
+      id: "usr-trainer-3",
+      name: "Dr. K. Ramanathan",
+      email: "k.ramanathan@incois.gov.in",
+      password: "password123",
+      role: "trainer",
+      organization: "Indian National Centre for Ocean Information Services (INCOIS)",
+      department: "Ocean State Forecast Division",
+      designation: "Scientist 'F'",
+      status: "active",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+      joinedAt: "2023-08-01",
+      profile: {
+        qualifications: [
+          { degree: "Ph.D. Physical Oceanography", institute: "National Institute of Oceanography (NIO)", year: "2009" }
+        ],
+        specialization: ["Coastal Hazards", "Tsunami Early Warning", "Ocean Numerical Modeling (ROMS/SWAN)"],
+        publicationsCount: 31,
+        yearsOfExperience: 18,
+        rating: 4.85,
+        bio: "Specialist in Indian Ocean tsunami travel-time modeling and operational coastal storm surge prediction."
+      }
+    },
+    {
+      id: "usr-admin-1",
+      name: "Smt. V. Meenakshi",
+      email: "admin@moes.gov.in",
+      password: "password123",
+      role: "admin",
+      organization: "Ministry of Earth Sciences (MoES)",
+      department: "Capacity Building & Human Resource Development Directorate",
+      designation: "Director (Administration & Training)",
+      status: "active",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80",
+      joinedAt: "2022-01-01",
+      profile: {
+        bio: "Overseeing executive training, inter-institutional capacity enhancement, and e-governance learning platforms across MoES bodies."
+      }
+    },
+    {
+      id: "usr-pending-1",
+      name: "Dr. Vikramaditya Sen",
+      email: "vikram.sen@ncmrwf.gov.in",
+      password: "password123",
+      role: "trainer",
+      organization: "National Centre for Medium Range Weather Forecasting (NCMRWF)",
+      department: "Global Ensemble Forecasting Systems",
+      designation: "Scientist 'D'",
+      status: "pending_approval",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
+      joinedAt: "2026-09-18",
+      profile: {
+        qualifications: [{ degree: "Ph.D. Atmospheric Modeling", institute: "IIT Delhi", year: "2017" }],
+        specialization: ["High-Performance Computing (HPC)", "NCMRWF Unified Model (NCUM)", "Data Assimilation"],
+        yearsOfExperience: 9,
+        bio: "Applied researcher working on ensemble data assimilation on high-performance supercomputing clusters (PRATYUSH/MIHIR)."
+      }
+    },
+    {
+      id: "usr-trainee-2",
+      name: "Rahul Verma",
+      email: "rahul.verma@imd.gov.in",
+      password: "password123",
+      role: "trainee",
+      organization: "India Meteorological Department (IMD)",
+      department: "Regional Meteorological Centre (RMC) Kolkata",
+      designation: "Meteorologist Grade-I",
+      status: "active",
+      avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80",
+      joinedAt: "2025-07-20",
+      profile: {
+        qualifications: [{ degree: "B.Tech Electrical Eng.", institute: "Jadavpur University", year: "2023" }],
+        interests: ["Radar Maintenance", "Automatic Weather Stations (AWS)", "IoT Sensor Calibration"],
+        skills: [{ name: "Hardware Diagnostics", level: 80 }, { name: "AWS Calibration", level: 75 }],
+        bio: "Instrument maintenance engineer in charge of northeastern Doppler radars and telemetry stations."
+      }
+    }
+  ],
+
+  courses: [
+    {
+      id: "crs-101",
+      code: "CC-MET-101",
+      title: "Advanced Doppler Weather Radar (DWR) Calibration & Severe Storm Analysis",
+      domain: "Radar Meteorology",
+      institution: "IMD Central Training Institute, Pune",
+      level: "Advanced",
+      duration: "40 Hours (4 Weeks)",
+      mode: "Blended / Digital Laboratory",
+      trainerId: "usr-trainer-1",
+      trainerName: "Dr. Rajeshwar Rao",
+      thumbnail: "https://images.unsplash.com/photo-1527482797697-8795b05a13fe?w=600&auto=format&fit=crop&q=80",
+      description: "Master modern S-band and C-band dual-polarization Doppler weather radar systems, hardware calibration protocols, velocity de-aliasing, hydrometeor classification, and real-time severe convective storm nowcasting.",
+      syllabus: [
+        "Module 1: Dual-Polarization Principles (Z, ZDR, KDP, Correlation Coefficient)",
+        "Module 2: Radar System Calibration, Solar Calibration & Ground Clutter Suppression",
+        "Module 3: Mesocyclone, Microburst, and Tornado Vortex Signature (TVS) Identification",
+        "Module 4: Quantitative Precipitation Estimation (QPE) and Flash Flood Warning Workflows"
+      ],
+      tags: ["Radar", "Severe Weather", "Nowcasting", "Dual-Pol"],
+      status: "published",
+      featured: true,
+      enrolledCount: 142,
+      rating: 4.9,
+      reviewCount: 38
+    },
+    {
+      id: "crs-202",
+      code: "CC-NWP-202",
+      title: "Numerical Weather Prediction (NWP) Modeling & Data Assimilation",
+      domain: "Atmospheric Modeling",
+      institution: "National Centre for Medium Range Weather Forecasting (NCMRWF)",
+      level: "Intermediate",
+      duration: "60 Hours (6 Weeks)",
+      mode: "Hands-on HPC Workshop",
+      trainerId: "usr-trainer-1",
+      trainerName: "Dr. Rajeshwar Rao",
+      thumbnail: "https://images.unsplash.com/photo-1507499739999-097706ad8914?w=600&auto=format&fit=crop&q=80",
+      description: "Comprehensive practical study of atmospheric dynamic equations, boundary layer parameterization schemes, WRF model compilation, 3D/4D-Var data assimilation, and post-processing on MoES supercomputers.",
+      syllabus: [
+        "Module 1: Governing Hydrodynamic Equations & Finite Difference Methods",
+        "Module 2: WRF Preprocessing System (WPS) & Domain Nesting",
+        "Module 3: Meteorological Data Assimilation (GSI, Radiance Assimilation)",
+        "Module 4: Ensemble Prediction Systems (EPS) and Model Verification"
+      ],
+      tags: ["NWP", "WRF Model", "HPC", "Data Assimilation"],
+      status: "published",
+      featured: true,
+      enrolledCount: 98,
+      rating: 4.8,
+      reviewCount: 29
+    },
+    {
+      id: "crs-303",
+      code: "CC-SAT-303",
+      title: "INSAT-3D/3DR Satellite Data Processing & Tropical Cyclone Tracking",
+      domain: "Satellite Meteorology",
+      institution: "IMD Satellite Meteorology Division, New Delhi",
+      level: "Advanced",
+      duration: "35 Hours (3 Weeks)",
+      mode: "Online Video & Interactive Laboratory",
+      trainerId: "usr-trainer-2",
+      trainerName: "Dr. Priya Nair",
+      thumbnail: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80",
+      description: "Operational methodologies for multi-spectral payload data processing (Imager & Sounder), cloud top temperature interpretation, water vapor winds, and satellite-based cyclogenesis diagnosis using enhanced Dvorak techniques.",
+      syllabus: [
+        "Module 1: INSAT-3D/3DR/3DS Channel Radiometry and Calibration",
+        "Module 2: Derived Products: OLR, Rain Estimation, Fog and Snow Mapping",
+        "Module 3: Advanced Dvorak Technique (ADT) for Cyclone Intensity",
+        "Module 4: Operational Interpretation of Rapid Scan Imagery"
+      ],
+      tags: ["Satellite", "INSAT", "Tropical Cyclones", "Remote Sensing"],
+      status: "published",
+      featured: true,
+      enrolledCount: 165,
+      rating: 4.85,
+      reviewCount: 42
+    },
+    {
+      id: "crs-501",
+      code: "CC-OCN-501",
+      title: "Ocean Observation Systems & Tsunami Early Warning Operations",
+      domain: "Ocean Science & Hazards",
+      institution: "Indian National Centre for Ocean Information Services (INCOIS), Hyderabad",
+      level: "Intermediate",
+      duration: "45 Hours (4 Weeks)",
+      mode: "Hybrid",
+      trainerId: "usr-trainer-3",
+      trainerName: "Dr. K. Ramanathan",
+      thumbnail: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=600&auto=format&fit=crop&q=80",
+      description: "Operational training on Moored Buoys, Argo Floats, Coastal High-Frequency Radars, Bottom Pressure Recorders (BPR), and real-time decision support systems for Indian Ocean Tsunami Early Warning.",
+      syllabus: [
+        "Module 1: Indian Ocean Observing Network (OOS & Argo Program)",
+        "Module 2: Tsunami Propagation Physics and TUNAMI-N2 Modeling",
+        "Module 3: Real-time Seismic & Sea-level Monitoring Networks",
+        "Module 4: Standard Operating Procedures (SOPs) for Coastal Bulletins"
+      ],
+      tags: ["Oceanography", "Tsunami Warning", "INCOIS", "Marine Hazards"],
+      status: "published",
+      featured: false,
+      enrolledCount: 84,
+      rating: 4.75,
+      reviewCount: 19
+    },
+    {
+      id: "crs-402",
+      code: "CC-SEIS-402",
+      title: "National Seismological Network Operations & Earthquake Fast-Parametrization",
+      domain: "Geophysics & Seismology",
+      institution: "National Centre for Seismology (NCS), New Delhi",
+      level: "Advanced",
+      duration: "50 Hours (5 Weeks)",
+      mode: "Virtual Laboratory",
+      trainerId: "usr-trainer-1",
+      trainerName: "Dr. Rajeshwar Rao",
+      thumbnail: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&auto=format&fit=crop&q=80",
+      description: "Broadband seismic sensor installation, telemetric digital acquisition, automatic P-wave arrival phase picking, focal mechanism inversion, and rapid earthquake epicenter reporting.",
+      syllabus: [
+        "Module 1: Principles of Broadband Seismometers & Accelerographs",
+        "Module 2: Seedlink Telemetry & SeisComP Pro Operational Architecture",
+        "Module 3: Fast Hypocenter Determination & Magnitude Estimation",
+        "Module 4: Earthquake Early Warning System (EEWS) Principles"
+      ],
+      tags: ["Seismology", "Earthquake", "Geophysics", "NCS"],
+      status: "published",
+      featured: false,
+      enrolledCount: 72,
+      rating: 4.7,
+      reviewCount: 15
+    }
+  ],
+
+  courseMaterials: [
+    {
+      id: "mat-1",
+      courseId: "crs-101",
+      type: "video",
+      title: "Lecture 1: Principles of Dual-Polarization Radar Architecture",
+      duration: "45 mins",
+      fileUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      description: "Comprehensive introduction to dual-polarimetric parameters, differential reflectivity (ZDR), and specific differential phase (KDP).",
+      uploadedBy: "Dr. Rajeshwar Rao",
+      uploadedAt: "2026-08-10",
+      size: "185 MB"
+    },
+    {
+      id: "mat-2",
+      courseId: "crs-101",
+      type: "presentation",
+      title: "DWR Calibration Standards & Solar Calibration Procedure.pdf",
+      fileUrl: "/docs/dwr_calibration_manual.pdf",
+      description: "Official IMD SOP slides detailing sun-tracking calibration for radar receiver gain and antenna beam alignment.",
+      uploadedBy: "Dr. Rajeshwar Rao",
+      uploadedAt: "2026-08-12",
+      size: "8.4 MB"
+    },
+    {
+      id: "mat-3",
+      courseId: "crs-101",
+      type: "document",
+      title: "Operational Handbook: Severe Thunderstorm & Squall Line Signatures.pdf",
+      fileUrl: "/docs/thunderstorm_handbook.pdf",
+      description: "Field guide for identifying bow echoes, hook echoes, and microburst divergence in velocity PPI products.",
+      uploadedBy: "Dr. Rajeshwar Rao",
+      uploadedAt: "2026-08-15",
+      size: "12.1 MB"
+    },
+    {
+      id: "mat-4",
+      courseId: "crs-101",
+      type: "dataset",
+      title: "Radar NetCDF Volume Scan: Severe Cyclone Biparjoy (Kandla DWR).zip",
+      fileUrl: "/data/dwr_biparjoy_sample.zip",
+      description: "Level-II calibrated radar raw volume scan dataset with 12 elevation angles for laboratory simulation.",
+      uploadedBy: "Dr. Rajeshwar Rao",
+      uploadedAt: "2026-08-18",
+      size: "64.2 MB"
+    },
+    {
+      id: "mat-5",
+      courseId: "crs-202",
+      type: "video",
+      title: "Lecture: Compiling WRF-ARW with MPI and NetCDF Libraries",
+      duration: "58 mins",
+      fileUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+      description: "Step-by-step setup of the WRF atmospheric model on Linux clusters with parallel environment flags.",
+      uploadedBy: "Dr. Rajeshwar Rao",
+      uploadedAt: "2026-08-20",
+      size: "240 MB"
+    },
+    {
+      id: "mat-6",
+      courseId: "crs-303",
+      type: "presentation",
+      title: "INSAT-3D/3DR Spectral Channels & Rapid Scanning Protocols.pdf",
+      fileUrl: "/docs/insat_spectral_guide.pdf",
+      description: "Detailed breakdown of TIR-1, TIR-2, MIR, and Water Vapor absorption channels for cyclone monitoring.",
+      uploadedBy: "Dr. Priya Nair",
+      uploadedAt: "2026-08-22",
+      size: "15.6 MB"
+    }
+  ],
+
+  assessments: [
+    {
+      id: "asm-101",
+      courseId: "crs-101",
+      subject: "Doppler Weather Radar (DWR) Operational Competency",
+      title: "Module Certification Exam: Radar Calibration & Severe Storm Nowcasting",
+      durationMins: 15,
+      passPercentage: 70,
+      deadline: "2026-10-31T23:59:59Z",
+      createdBy: "usr-trainer-1",
+      totalMarks: 50,
+      questions: [
+        {
+          id: "q1",
+          text: "In dual-polarization weather radar, what does a high Reflectivity (Z > 50 dBZ) accompanied by a low or negative Differential Reflectivity (ZDR < 0 dB) typically indicate in a convective storm?",
+          options: [
+            "Heavy rain with large horizontally-oriented oblate raindrops",
+            "Presence of tumbling hail stones",
+            "An area of pure biological scatterers (insects/birds)",
+            "Stratiform drizzle with spherical droplets"
+          ],
+          correctIndex: 1,
+          explanation: "Tumbling hailstones do not have a preferred orientation in the air, resulting in high radar reflectivity (Z) but low or even negative ZDR due to resonance effects, which is a classic radar hail signature."
+        },
+        {
+          id: "q2",
+          text: "Which parameter in Doppler weather radar is immune to radar receiver calibration drift and partial beam blockage by terrain?",
+          options: [
+            "Equivalent Reflectivity Factor (Z)",
+            "Differential Reflectivity (ZDR)",
+            "Specific Differential Phase (KDP)",
+            "Cross-Correlation Coefficient (RhoHV)"
+          ],
+          correctIndex: 2,
+          explanation: "KDP is a phase measurement (degrees per kilometer) rather than an amplitude power measurement; therefore, it is insensitive to absolute power calibration errors, partial beam blockage, and attenuation."
+        },
+        {
+          id: "q3",
+          text: "What signature on a Doppler Velocity PPI product denotes a classic cyclonic Mesocyclone in the Northern Hemisphere when viewing a supercell storm?",
+          options: [
+            "A divergent couplet with inbound velocities to the north and outbound to the south",
+            "An azimuthal velocity couplet with inbound velocities on the left and outbound on the right relative to the radar beam",
+            "Uniform radial velocities approaching zero across all azimuths",
+            "A sudden velocity folding discontinuity without shear"
+          ],
+          correctIndex: 1,
+          explanation: "A mesocyclone is characterized by strong cyclonic shear producing an azimuthal couplet where velocities flow towards the radar on one side and away from the radar on the other side at the same range."
+        },
+        {
+          id: "q4",
+          text: "During solar calibration of an IMD S-band radar, what primary characteristic is determined by scanning across the solar disk?",
+          options: [
+            "Exact antenna pointing alignment (azimuth/elevation offset) and receiver sensitivity",
+            "Doppler velocity Nyquist interval",
+            "Pulse repetition frequency (PRF) duty cycle",
+            "Hydrometeor classification matrix weights"
+          ],
+          correctIndex: 0,
+          explanation: "The sun acts as a stable microwave emitter of known position; scanning it precisely determines radar antenna pointing offsets and verifies the receiver's minimum detectable signal."
+        },
+        {
+          id: "q5",
+          text: "What is the primary operational cause of 'Velocity De-aliasing' errors in Doppler Radar when observing squall lines?",
+          options: [
+            "Atmospheric refraction causing ducting of the radar beam",
+            "Target radial velocity exceeding the Maximum Unambiguous Velocity (Nyquist velocity = PRF * wavelength / 4)",
+            "Ground clutter suppression notch filters being too narrow",
+            "Attenuation caused by intense rain along the path"
+          ],
+          correctIndex: 1,
+          explanation: "Velocity aliasing happens when the true wind velocity exceeds the radar's Nyquist limit (Vmax = PRF * λ / 4), causing high inbound velocities to wrap around and appear as outbound velocities."
+        }
+      ]
+    },
+    {
+      id: "asm-202",
+      courseId: "crs-202",
+      subject: "Numerical Weather Prediction Fundamentals",
+      title: "Mid-Term Assessment: WRF Model Dynamics & Initial Conditions",
+      durationMins: 20,
+      passPercentage: 70,
+      deadline: "2026-11-15T23:59:59Z",
+      createdBy: "usr-trainer-1",
+      totalMarks: 50,
+      questions: [
+        {
+          id: "q201",
+          text: "Which vertical coordinate system is standard in the Advanced Research WRF (ARW) core?",
+          options: [
+            "Geometric height z-coordinate",
+            "Terrain-following hydrostatic-pressure vertical coordinate (eta)",
+            "Pure isentropic theta coordinate",
+            "Sigma-theta hybrid oceanic coordinate"
+          ],
+          correctIndex: 1,
+          explanation: "WRF-ARW uses a mass-based terrain-following hydrostatic-pressure vertical coordinate (often called the eta or mu coordinate)."
+        },
+        {
+          id: "q202",
+          text: "What does the Courant-Friedrichs-Lewy (CFL) condition dictate when configuring WRF time steps (dt)?",
+          options: [
+            "dt must be at least 10 times the spatial grid spacing dx in kilometers",
+            "dt in seconds should typically not exceed 6 times the horizontal grid spacing dx in kilometers",
+            "Time step is independent of spatial resolution in explicit solvers",
+            "dt must be equal to the radiation physics call frequency"
+          ],
+          correctIndex: 1,
+          explanation: "For the Runge-Kutta 3rd-order solver in WRF, a standard operational rule of thumb is dt (seconds) <= 6 * dx (km) to prevent numerical instability according to the CFL criterion."
+        }
+      ]
+    },
+    {
+      id: "asm-303",
+      courseId: "crs-303",
+      subject: "Satellite Imagery & Tropical Cyclone Analysis",
+      title: "Certification Assessment: INSAT Dvorak Technique & Cyclone Tracking",
+      durationMins: 15,
+      passPercentage: 75,
+      deadline: "2026-10-25T23:59:59Z",
+      createdBy: "usr-trainer-2",
+      totalMarks: 50,
+      questions: [
+        {
+          id: "q301",
+          text: "Under the enhanced Dvorak Technique for tropical cyclones, what does the T-number (T-No.) scale directly correlate to?",
+          options: [
+            "Only the sea surface temperature beneath the cyclone",
+            "Central sea level pressure (hPa) and maximum sustained surface wind speed (knots)",
+            "The lightning flash count in the outer rainbands",
+            "The forward translation speed of the cyclone center"
+          ],
+          correctIndex: 1,
+          explanation: "The Dvorak T-number (1.0 to 8.0) is directly tied to empirical tables that define the estimated central pressure and maximum sustained wind speeds of tropical cyclones."
+        }
+      ]
+    }
+  ],
+
+  submissions: [
+    {
+      id: "sub-1",
+      assessmentId: "asm-101",
+      courseId: "crs-101",
+      traineeId: "usr-trainee-1",
+      traineeName: "Ananya Sharma",
+      score: 50,
+      totalMarks: 50,
+      percentage: 100,
+      passed: true,
+      submittedAt: "2026-09-10T14:30:00Z",
+      answers: { q1: 1, q2: 2, q3: 1, q4: 0, q5: 1 }
+    },
+    {
+      id: "sub-2",
+      assessmentId: "asm-101",
+      courseId: "crs-101",
+      traineeId: "usr-trainee-2",
+      traineeName: "Rahul Verma",
+      score: 40,
+      totalMarks: 50,
+      percentage: 80,
+      passed: true,
+      submittedAt: "2026-09-12T11:20:00Z",
+      answers: { q1: 1, q2: 2, q3: 1, q4: 1, q5: 1 }
+    }
+  ],
+
+  enrollments: [
+    {
+      id: "enr-1",
+      traineeId: "usr-trainee-1",
+      courseId: "crs-101",
+      progress: 100,
+      completedModules: ["Module 1", "Module 2", "Module 3", "Module 4"],
+      enrolledAt: "2026-08-01",
+      completedAt: "2026-09-10",
+      status: "completed",
+      certificateId: "MOES-CC-2026-MET101-88492"
+    },
+    {
+      id: "enr-2",
+      traineeId: "usr-trainee-1",
+      courseId: "crs-202",
+      progress: 60,
+      completedModules: ["Module 1", "Module 2"],
+      enrolledAt: "2026-08-20",
+      status: "in_progress",
+      certificateId: null
+    },
+    {
+      id: "enr-3",
+      traineeId: "usr-trainee-1",
+      courseId: "crs-303",
+      progress: 35,
+      completedModules: ["Module 1"],
+      enrolledAt: "2026-09-01",
+      status: "in_progress",
+      certificateId: null
+    },
+    {
+      id: "enr-4",
+      traineeId: "usr-trainee-2",
+      courseId: "crs-101",
+      progress: 100,
+      completedModules: ["Module 1", "Module 2", "Module 3", "Module 4"],
+      enrolledAt: "2026-08-15",
+      completedAt: "2026-09-12",
+      status: "completed",
+      certificateId: "MOES-CC-2026-MET101-99201"
+    }
+  ],
+
+  feedback: [
+    {
+      id: "fb-1",
+      courseId: "crs-101",
+      traineeId: "usr-trainee-1",
+      traineeName: "Ananya Sharma",
+      rating: 5,
+      rubric: { contentQuality: 5, trainerEffectiveness: 5, practicalRelevance: 5 },
+      comment: "Outstanding training! The dual-polarization radar case studies on Cyclone Biparjoy provided invaluable insights for our daily operational shifts at NWFC.",
+      submittedAt: "2026-09-11"
+    },
+    {
+      id: "fb-2",
+      courseId: "crs-101",
+      traineeId: "usr-trainee-2",
+      traineeName: "Rahul Verma",
+      rating: 5,
+      rubric: { contentQuality: 5, trainerEffectiveness: 4, practicalRelevance: 5 },
+      comment: "Practical solar calibration step-by-step videos made field maintenance on the radar tower so much more manageable.",
+      submittedAt: "2026-09-13"
+    }
+  ],
+
+  announcements: [
+    {
+      id: "anc-1",
+      title: "MoES Annual Capacity Building Calendar for 2026-27 Officially Released",
+      category: "announcement",
+      priority: "high",
+      targetAudience: "all",
+      content: "The Ministry of Earth Sciences has notified 28 advanced technical training programs across IMD Pune, NCMRWF Noida, INCOIS Hyderabad, and IITM Pune. Trainees are encouraged to submit institutional nominations.",
+      author: "Smt. V. Meenakshi (MoES Admin)",
+      publishedAt: "2026-09-15"
+    },
+    {
+      id: "anc-2",
+      title: "Special Workshop: High-Resolution Regional Ensembles on PRATYUSH Supercomputer",
+      category: "notification",
+      priority: "medium",
+      targetAudience: "trainee",
+      content: "NCMRWF is organizing a 5-day virtual hands-on lab on running Convective-Permitting Ensemble Prediction Systems. Registration closes on October 5th, 2026.",
+      author: "MoES Training Cell",
+      publishedAt: "2026-09-18"
+    },
+    {
+      id: "anc-3",
+      title: "Achievement: IMD Training Institute Pune Awarded WMO Regional Training Centre Excellence Banner",
+      category: "achievement",
+      priority: "high",
+      targetAudience: "all",
+      content: "The World Meteorological Organization (WMO) has formally recognized IMD Pune RTC for outstanding digital capacity-building and specialized South-Asian monsoon forecasting modules.",
+      author: "Director General of Meteorology",
+      publishedAt: "2026-09-19"
+    },
+    {
+      id: "anc-4",
+      title: "New Course Live: INSAT-3DS High-Resolution Sounder Imagery Interpretation",
+      category: "new_content",
+      priority: "medium",
+      targetAudience: "all",
+      content: "Enrollments are now open for the newly uploaded INSAT-3DS satellite course prepared by the Satellite Meteorology Division. Includes 14 new lecture modules.",
+      author: "Dr. Priya Nair",
+      publishedAt: "2026-09-20"
+    }
+  ],
+
+  competencyTaxonomy: [
+    { id: "sk-rad", name: "Radar Meteorology & Dual-Pol Operations", category: "Observational Systems", weight: 0.9 },
+    { id: "sk-nwp", name: "Numerical Weather Prediction & Data Assimilation", category: "Atmospheric Modeling", weight: 0.95 },
+    { id: "sk-sat", name: "Satellite Remote Sensing (INSAT/Scatterometer)", category: "Remote Sensing", weight: 0.9 },
+    { id: "sk-ocn", name: "Ocean Dynamics & Tsunami Propagation Modeling", category: "Marine & Coastal Sciences", weight: 0.85 },
+    { id: "sk-seis", name: "Seismological Inversion & Earthquake Monitoring", category: "Solid Earth Geophysics", weight: 0.85 },
+    { id: "sk-agro", name: "Agrometeorological Advisories & Monsoon Forecasts", category: "Applied Services", weight: 0.8 },
+    { id: "sk-hpc", name: "HPC Clustering & Parallel Computing (MPI/OpenMP)", category: "Computational Infrastructure", weight: 0.85 }
+  ],
+
+  trainerCompetencies: [
+    {
+      trainerId: "usr-trainer-1",
+      trainerName: "Dr. Rajeshwar Rao",
+      organization: "IMD Pune",
+      skills: {
+        "sk-rad": 98,
+        "sk-nwp": 88,
+        "sk-sat": 70,
+        "sk-hpc": 75
+      },
+      experienceYears: 22,
+      trainerRating: 4.9,
+      certifiedLead: true,
+      activeCoursesCount: 3
+    },
+    {
+      trainerId: "usr-trainer-2",
+      trainerName: "Dr. Priya Nair",
+      organization: "IMD New Delhi",
+      skills: {
+        "sk-sat": 96,
+        "sk-rad": 65,
+        "sk-agro": 72
+      },
+      experienceYears: 16,
+      trainerRating: 4.85,
+      certifiedLead: true,
+      activeCoursesCount: 1
+    },
+    {
+      trainerId: "usr-trainer-3",
+      trainerName: "Dr. K. Ramanathan",
+      organization: "INCOIS Hyderabad",
+      skills: {
+        "sk-ocn": 95,
+        "sk-hpc": 80
+      },
+      experienceYears: 18,
+      trainerRating: 4.85,
+      certifiedLead: true,
+      activeCoursesCount: 1
+    },
+    {
+      trainerId: "usr-pending-1",
+      trainerName: "Dr. Vikramaditya Sen",
+      organization: "NCMRWF Noida",
+      skills: {
+        "sk-nwp": 92,
+        "sk-hpc": 94
+      },
+      experienceYears: 9,
+      trainerRating: 4.6,
+      certifiedLead: false,
+      activeCoursesCount: 0
+    }
+  ]
+};

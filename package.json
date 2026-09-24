@@ -1,0 +1,12 @@
+{
+  "name": "capacity-connect",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CAPACITY CONNECT - Digital Capacity Building and Learning Management Portal for MoES / IMD (SIH Problem Statement 26075)",
+  "scripts": {
+    "server": "node server/index.js",
+    "client": "npm run dev --prefix client",
+    "build": "npm run build --prefix client"
+  },
+  "keywords": ["sih", "moes", "imd", "lms", "capacity-building", "competency-mapping"]
+}
