@@ -37,7 +37,9 @@ export const translations = {
     competencyEngine: "Competency Mapping Engine",
     institutionalDashboards: "Institutional Dashboards",
     userApprovals: "User Approvals & Roles",
-    broadcastNoticeboard: "Broadcast & Noticeboard"
+    broadcastNoticeboard: "Broadcast & Noticeboard",
+    signInRegister: "Sign In / Register",
+    notifications: "Notifications"
   },
   hi: {
     portalTitle: "क्षमता सेतु",
@@ -76,6 +78,8 @@ export const translations = {
     competencyEngine: "योग्यता मानचित्रण इंजन (Competency Mapping)",
     institutionalDashboards: "संस्थागत डैशबोर्ड एवं आंकड़े",
     userApprovals: "उपयोगकर्ता अनुमोदन एवं भूमिकाएं",
-    broadcastNoticeboard: "आधिकारिक परिपत्र एवं प्रसारण"
+    broadcastNoticeboard: "आधिकारिक परिपत्र एवं प्रसारण",
+    signInRegister: "साइन इन / पंजीकरण",
+    notifications: "सूचनाएं"
   }
 };

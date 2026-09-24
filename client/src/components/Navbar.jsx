@@ -12,9 +12,11 @@ import {
   ChevronDown,
   Layers,
   Sparkles,
-  Languages
+  Languages,
+  LogIn
 } from 'lucide-react';
 import { translations } from '../services/translations';
+import NotificationDropdown from './NotificationDropdown';
 
 export default function Navbar({ 
   currentUser, 
@@ -22,7 +24,8 @@ export default function Navbar({
   activeTab, 
   setActiveTab,
   lang = 'en',
-  setLang
+  setLang,
+  onOpenAuthModal
 }) {
   const t = translations[lang] || translations.en;
 
@@ -168,6 +171,19 @@ export default function Navbar({
                 </button>
               </div>
             </div>
+
+            {/* Notification Dropdown */}
+            <NotificationDropdown />
+
+            {/* Manual Auth / Account Switch Modal Trigger */}
+            <button
+              onClick={onOpenAuthModal}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs hover:border-slate-300 transition-all cursor-pointer"
+              title="Sign in or register a new user"
+            >
+              <LogIn className="w-3.5 h-3.5 text-sky-600" />
+              <span className="hidden sm:inline">{t.signInRegister}</span>
+            </button>
 
             {/* User Profile Pill */}
             <div className="flex items-center gap-2 pl-1">

@@ -6,6 +6,7 @@ import TrainerPortal from './components/TrainerPortal';
 import AdminPortal from './components/AdminPortal';
 import CourseCatalog from './components/CourseCatalog';
 import CertificateModal from './components/CertificateModal';
+import AuthModal from './components/AuthModal';
 import { api } from './services/api';
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
   const [announcements, setAnnouncements] = useState([]);
   const [enrollments, setEnrollments] = useState([]);
   const [activeCertificateId, setActiveCertificateId] = useState(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lang, setLang] = useState('en');
 
@@ -79,6 +81,15 @@ export default function App() {
     }
   };
 
+  const handleAuthSuccess = async (user) => {
+    setCurrentUser(user);
+    if (user.role === 'trainee') {
+      const enr = await api.getEnrollments(user.id);
+      setEnrollments(enr);
+    }
+    setActiveTab('portal');
+  };
+
   const handleSelectCourse = (courseId) => {
     setActiveTab('portal');
   };
@@ -107,6 +118,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         lang={lang}
         setLang={setLang}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
       />
 
       {/* Main View Area */}
@@ -194,6 +206,13 @@ export default function App() {
           onClose={() => setActiveCertificateId(null)}
         />
       )}
+
+      {/* Real MoES Authentication & Registration Modal */}
+      <AuthModal 
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onAuthSuccess={handleAuthSuccess}
+      />
 
     </div>
   );

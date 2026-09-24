@@ -15,7 +15,8 @@ import {
   Send,
   Calendar,
   Layers,
-  ChevronDown
+  ChevronDown,
+  Sparkles
 } from 'lucide-react';
 import { api } from '../services/api';
 
@@ -52,6 +53,24 @@ export default function TrainerPortal({ currentUser, onRefreshData }) {
   const [uploadDuration, setUploadDuration] = useState('45 mins');
   const [uploadSize, setUploadSize] = useState('12.5 MB');
   const [uploadSuccessMsg, setUploadSuccessMsg] = useState('');
+
+  // Course Curriculum Builder State
+  const [newCourseTitle, setNewCourseTitle] = useState('');
+  const [newCourseDomain, setNewCourseDomain] = useState('Radar Meteorology');
+  const [newCourseInstitution, setNewCourseInstitution] = useState('India Meteorological Department (IMD)');
+  const [newCourseLevel, setNewCourseLevel] = useState('Intermediate');
+  const [newCourseDuration, setNewCourseDuration] = useState('30 Hours / 3 Weeks');
+  const [newCourseMode, setNewCourseMode] = useState('Blended (Virtual + Field Lab)');
+  const [newCourseDesc, setNewCourseDesc] = useState('');
+  const [newCourseModules, setNewCourseModules] = useState([
+    'Module 1: Scientific Foundations & Atmospheric Physics',
+    'Module 2: Observational Instrumentation & Data QC',
+    'Module 3: Simulation Lab & Real-Time Warning Protocols',
+    'Module 4: Operational Assessment & Case Study Defense'
+  ]);
+  const [newCourseTags, setNewCourseTags] = useState('MoES, IMD, Operational Forecasting');
+  const [courseSuccessMsg, setCourseSuccessMsg] = useState('');
+  const [isCreatingCourse, setIsCreatingCourse] = useState(false);
 
   useEffect(() => {
     loadTrainerData();
@@ -186,6 +205,37 @@ export default function TrainerPortal({ currentUser, onRefreshData }) {
     }
   };
 
+  const handleCreateCourse = async (e) => {
+    e.preventDefault();
+    if (!newCourseTitle.trim()) return;
+    setIsCreatingCourse(true);
+    setCourseSuccessMsg('');
+    try {
+      const res = await api.createCourse({
+        title: newCourseTitle,
+        domain: newCourseDomain,
+        institution: newCourseInstitution,
+        level: newCourseLevel,
+        duration: newCourseDuration,
+        mode: newCourseMode,
+        trainerId: currentUser.id,
+        description: newCourseDesc || 'Operational curriculum designed for Ministry of Earth Sciences technical officers.',
+        syllabus: newCourseModules.filter(m => m.trim().length > 0),
+        tags: newCourseTags.split(',').map(t => t.trim()).filter(Boolean)
+      });
+      setCourseSuccessMsg(`Course "${res.title}" successfully created with Code: ${res.code}`);
+      setNewCourseTitle('');
+      setNewCourseDesc('');
+      loadTrainerData();
+      onRefreshData?.();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to create course');
+    } finally {
+      setIsCreatingCourse(false);
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
@@ -261,6 +311,17 @@ export default function TrainerPortal({ currentUser, onRefreshData }) {
         >
           <Upload className="w-4 h-4" />
           <span>Trainer Digital Library</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('curriculum')}
+          className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
+            activeTab === 'curriculum'
+              ? 'bg-indigo-600 text-white shadow-xs'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+          }`}
+        >
+          <BookOpen className="w-4 h-4" />
+          <span>Course Curriculum Builder</span>
         </button>
       </div>
 
@@ -641,6 +702,270 @@ export default function TrainerPortal({ currentUser, onRefreshData }) {
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      )}
+
+      {/* TAB 4: COURSE CURRICULUM BUILDER */}
+      {activeTab === 'curriculum' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Course Authoring Form */}
+          <div className="lg:col-span-5 bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-6">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 text-xs font-semibold mb-2">
+                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                <span>MoES Academic Division</span>
+              </div>
+              <h2 className="text-xl font-bold text-slate-900">Author New Training Program</h2>
+              <p className="text-xs text-slate-500">
+                Design formal technical curricula with standardized MoES syllabi and practical competency tracks.
+              </p>
+            </div>
+
+            {courseSuccessMsg && (
+              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{courseSuccessMsg}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleCreateCourse} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Program Title *
+                </label>
+                <input 
+                  type="text"
+                  required
+                  value={newCourseTitle}
+                  onChange={(e) => setNewCourseTitle(e.target.value)}
+                  placeholder="e.g. Advanced Doppler Weather Radar Operations & QC"
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Earth Science Domain *
+                  </label>
+                  <select
+                    value={newCourseDomain}
+                    onChange={(e) => setNewCourseDomain(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                  >
+                    <option value="Radar Meteorology">Radar Meteorology</option>
+                    <option value="Numerical Weather Prediction">Numerical Weather Prediction</option>
+                    <option value="Tropical Cyclone Dynamics">Tropical Cyclone Dynamics</option>
+                    <option value="Satellite Remote Sensing">Satellite Remote Sensing</option>
+                    <option value="Physical Oceanography">Physical Oceanography</option>
+                    <option value="Seismology & Tsunami Warning">Seismology & Tsunami Warning</option>
+                    <option value="Agrometeorology">Agrometeorology</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Skill Level *
+                  </label>
+                  <select
+                    value={newCourseLevel}
+                    onChange={(e) => setNewCourseLevel(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                  >
+                    <option value="Foundational">Foundational</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Host MoES Institute
+                  </label>
+                  <select
+                    value={newCourseInstitution}
+                    onChange={(e) => setNewCourseInstitution(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                  >
+                    <option value="India Meteorological Department (IMD)">IMD New Delhi / Pune</option>
+                    <option value="Indian Institute of Tropical Meteorology (IITM)">IITM Pune</option>
+                    <option value="National Centre for Medium Range Weather Forecasting (NCMRWF)">NCMRWF Noida</option>
+                    <option value="Indian National Centre for Ocean Information Services (INCOIS)">INCOIS Hyderabad</option>
+                    <option value="National Institute of Ocean Technology (NIOT)">NIOT Chennai</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Delivery Mode
+                  </label>
+                  <select
+                    value={newCourseMode}
+                    onChange={(e) => setNewCourseMode(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                  >
+                    <option value="Blended (Virtual + Field Lab)">Blended (Virtual + Lab)</option>
+                    <option value="Live Virtual Sessions">Live Virtual Sessions</option>
+                    <option value="Station Hands-on Training">Station Hands-on Training</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Duration & Credit
+                  </label>
+                  <input 
+                    type="text"
+                    value={newCourseDuration}
+                    onChange={(e) => setNewCourseDuration(e.target.value)}
+                    placeholder="e.g. 40 Hours / 4 Weeks"
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Search Tags
+                  </label>
+                  <input 
+                    type="text"
+                    value={newCourseTags}
+                    onChange={(e) => setNewCourseTags(e.target.value)}
+                    placeholder="MoES, Radar, QC"
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Program Overview & Competency Target
+                </label>
+                <textarea 
+                  rows={2}
+                  value={newCourseDesc}
+                  onChange={(e) => setNewCourseDesc(e.target.value)}
+                  placeholder="Target competencies, prerequisites, and operational deployment utility..."
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                />
+              </div>
+
+              {/* Modular Syllabus Editor */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold text-slate-700">
+                    Modular Syllabus ({newCourseModules.length} Modules)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setNewCourseModules(prev => [...prev, `Module ${prev.length + 1}: Topic`])}
+                    className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Module</span>
+                  </button>
+                </div>
+
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                  {newCourseModules.map((mod, mIdx) => (
+                    <div key={mIdx} className="flex items-center gap-2">
+                      <input 
+                        type="text"
+                        value={mod}
+                        onChange={(e) => {
+                          const updated = [...newCourseModules];
+                          updated[mIdx] = e.target.value;
+                          setNewCourseModules(updated);
+                        }}
+                        className="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                      />
+                      {newCourseModules.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setNewCourseModules(prev => prev.filter((_, idx) => idx !== mIdx))}
+                          className="p-1.5 text-slate-400 hover:text-rose-600"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isCreatingCourse}
+                className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition-colors shadow-xs flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                <Plus className="w-4 h-4" />
+                <span>{isCreatingCourse ? 'Registering with MoES Catalog...' : 'Publish Course to Official Catalog'}</span>
+              </button>
+            </form>
+          </div>
+
+          {/* Existing Authored Programs List */}
+          <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-4">
+            <h3 className="text-base font-bold text-slate-900 flex items-center justify-between">
+              <span>My Authored Scientific Programs</span>
+              <span className="text-xs text-slate-400 font-normal">{courses.length} Published</span>
+            </h3>
+
+            <div className="space-y-4">
+              {courses.map((c) => (
+                <div 
+                  key={c.id}
+                  className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-indigo-300 transition-all space-y-3"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800">
+                          {c.code}
+                        </span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-200 text-slate-700">
+                          {c.level}
+                        </span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-800">
+                          {c.domain}
+                        </span>
+                      </div>
+                      <h4 className="text-sm font-bold text-slate-900 mt-1">{c.title}</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">{c.description}</p>
+                    </div>
+
+                    <div className="text-right sm:shrink-0">
+                      <div className="text-xs font-bold text-indigo-700">{c.duration}</div>
+                      <div className="text-[11px] text-slate-500">{c.enrolledCount || 0} enrolled</div>
+                    </div>
+                  </div>
+
+                  {c.syllabus && c.syllabus.length > 0 && (
+                    <div className="border-t border-slate-200/60 pt-3">
+                      <div className="text-[11px] font-bold text-slate-600 mb-1 flex items-center gap-1">
+                        <Layers className="w-3.5 h-3.5 text-indigo-500" />
+                        <span>Curriculum Modules:</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] text-slate-600">
+                        {c.syllabus.map((mod, idx) => (
+                          <div key={idx} className="flex items-center gap-1.5 truncate">
+                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0" />
+                            <span className="truncate">{mod}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
