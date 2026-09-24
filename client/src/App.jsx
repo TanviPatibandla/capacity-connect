@@ -16,6 +16,8 @@ export default function App() {
   const [enrollments, setEnrollments] = useState([]);
   const [activeCertificateId, setActiveCertificateId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [lang, setLang] = useState('en');
+
 
   useEffect(() => {
     initApp();
@@ -103,6 +105,8 @@ export default function App() {
         onSwitchRole={handleSwitchRole}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        lang={lang}
+        setLang={setLang}
       />
 
       {/* Main View Area */}
@@ -115,6 +119,7 @@ export default function App() {
             onGoToPortal={setActiveTab}
             onSwitchRole={handleSwitchRole}
             currentUser={currentUser}
+            lang={lang}
           />
         )}
 
@@ -125,6 +130,7 @@ export default function App() {
             onEnroll={handleEnroll}
             currentUser={currentUser}
             onSelectCourse={handleSelectCourse}
+            lang={lang}
           />
         )}
 
@@ -135,8 +141,10 @@ export default function App() {
                 currentUser={currentUser}
                 onViewCertificate={(certId) => setActiveCertificateId(certId)}
                 onRefreshUser={() => handleSwitchRole('trainee')}
+                lang={lang}
               />
             )}
+
             {currentUser.role === 'trainer' && (
               <TrainerPortal 
                 currentUser={currentUser}

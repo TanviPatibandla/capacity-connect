@@ -11,29 +11,20 @@ import {
   LogOut, 
   ChevronDown,
   Layers,
-  Sparkles
+  Sparkles,
+  Languages
 } from 'lucide-react';
+import { translations } from '../services/translations';
 
 export default function Navbar({ 
   currentUser, 
   onSwitchRole, 
   activeTab, 
-  setActiveTab, 
-  onOpenAuthModal 
+  setActiveTab,
+  lang = 'en',
+  setLang
 }) {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const roleColors = {
-    trainee: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    trainer: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-    admin: 'bg-rose-50 text-rose-700 border-rose-200'
-  };
-
-  const roleLabels = {
-    trainee: 'Trainee (Scientist/Assistant)',
-    trainer: 'Trainer (Senior Faculty)',
-    admin: 'Director / Admin (MoES HQ)'
-  };
+  const t = translations[lang] || translations.en;
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
@@ -55,14 +46,14 @@ export default function Navbar({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-sky-700 transition-colors">
-                  CAPACITY <span className="text-sky-600 font-extrabold">CONNECT</span>
+                  {lang === 'hi' ? 'क्षमता ' : 'CAPACITY '}<span className="text-sky-600 font-extrabold">{lang === 'hi' ? 'सेतु' : 'CONNECT'}</span>
                 </span>
                 <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide bg-blue-100 text-blue-800 border border-blue-200">
                   MoES • IMD
                 </span>
               </div>
               <p className="text-xs text-slate-500 font-medium hidden sm:block">
-                Digital Capacity Building & LMS Portal • Govt. of India
+                {t.portalSubtitle}
               </p>
             </div>
           </div>
@@ -77,7 +68,7 @@ export default function Navbar({
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
-              Home & Noticeboard
+              {t.home}
             </button>
             <button
               onClick={() => setActiveTab('courses')}
@@ -87,7 +78,7 @@ export default function Navbar({
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
-              Course Catalog
+              {t.courses}
             </button>
             <button
               onClick={() => setActiveTab('portal')}
@@ -99,21 +90,48 @@ export default function Navbar({
             >
               <Layers className="w-4 h-4" />
               <span>
-                {currentUser.role === 'trainee' && 'My Learning Room'}
-                {currentUser.role === 'trainer' && 'Trainer Studio'}
-                {currentUser.role === 'admin' && 'Admin Command Center'}
+                {currentUser.role === 'trainee' && t.learningRoom}
+                {currentUser.role === 'trainer' && t.trainerStudio}
+                {currentUser.role === 'admin' && t.adminCenter}
               </span>
             </button>
           </nav>
 
-          {/* Right Section: 1-Click Role Switcher (For SIH Evaluators) & User Badge */}
-          <div className="flex items-center gap-3">
-            {/* Quick Demo Role Switcher */}
+          {/* Right Section: Language Toggle, 1-Click Role Switcher & User Profile */}
+          <div className="flex items-center gap-2.5">
+            
+            {/* Government Bilingual Toggle (Official Languages Act) */}
+            <div className="flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-bold">
+              <button
+                onClick={() => setLang && setLang('en')}
+                className={`px-2 py-1 rounded-lg transition-all ${
+                  lang === 'en'
+                    ? 'bg-white text-sky-700 shadow-2xs'
+                    : 'text-slate-500 hover:text-slate-800'
+                }`}
+                title="English"
+              >
+                ENG
+              </button>
+              <button
+                onClick={() => setLang && setLang('hi')}
+                className={`px-2 py-1 rounded-lg transition-all ${
+                  lang === 'hi'
+                    ? 'bg-white text-orange-700 shadow-2xs font-extrabold'
+                    : 'text-slate-500 hover:text-slate-800'
+                }`}
+                title="राजभाषा हिंदी"
+              >
+                हिन्दी
+              </button>
+            </div>
+
+            {/* Quick Demo Role Switcher (For SIH Evaluators) */}
             <div className="relative">
               <div className="hidden lg:flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-semibold">
                 <span className="text-slate-400 pl-2 pr-1 flex items-center gap-1">
                   <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                  Evaluate Role:
+                  {t.evaluateRole}
                 </span>
                 <button
                   onClick={() => onSwitchRole('trainee')}
@@ -124,7 +142,7 @@ export default function Navbar({
                   }`}
                   title="Switch to Trainee (Ananya Sharma)"
                 >
-                  Trainee
+                  {t.trainee}
                 </button>
                 <button
                   onClick={() => onSwitchRole('trainer')}
@@ -135,7 +153,7 @@ export default function Navbar({
                   }`}
                   title="Switch to Trainer (Dr. Rajeshwar Rao)"
                 >
-                  Trainer
+                  {t.trainer}
                 </button>
                 <button
                   onClick={() => onSwitchRole('admin')}
@@ -146,13 +164,13 @@ export default function Navbar({
                   }`}
                   title="Switch to Admin (Smt. V. Meenakshi)"
                 >
-                  Admin
+                  {t.admin}
                 </button>
               </div>
             </div>
 
             {/* User Profile Pill */}
-            <div className="flex items-center gap-2 pl-2">
+            <div className="flex items-center gap-2 pl-1">
               <img 
                 src={currentUser.avatar} 
                 alt={currentUser.name} 

@@ -19,15 +19,23 @@ import {
   Send,
   HelpCircle,
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
+  Sparkles,
+  Lock,
+  Unlock,
+  Check
 } from 'lucide-react';
 import { api } from '../services/api';
+import RadarSimulationLab from './RadarSimulationLab';
+import NwpSimulationLab from './NwpSimulationLab';
 
 export default function TraineePortal({ 
   currentUser, 
   onViewCertificate, 
-  onRefreshUser 
+  onRefreshUser,
+  lang = 'en'
 }) {
+
   const [activeTab, setActiveTab] = useState('courses'); // courses, profile, assessments, certificates
   const [enrollments, setEnrollments] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -38,11 +46,14 @@ export default function TraineePortal({
   const [timeLeft, setTimeLeft] = useState(0);
   const [assessmentResult, setAssessmentResult] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [completedSteps, setCompletedSteps] = useState(['lecture_video']);
+  const [skillGap, setSkillGap] = useState(null);
 
   // Feedback form state
   const [feedbackRating, setFeedbackRating] = useState(5);
   const [feedbackRubric, setFeedbackRubric] = useState({ contentQuality: 5, trainerEffectiveness: 5, practicalRelevance: 5 });
   const [feedbackComment, setFeedbackComment] = useState('');
+
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
 
   // Profile edit state
@@ -57,11 +68,18 @@ export default function TraineePortal({
   const loadTraineeData = async () => {
     try {
       setLoading(true);
-      const enr = await api.getEnrollments(currentUser.id);
+      const [enr, gap] = await Promise.all([
+        api.getEnrollments(currentUser.id),
+        api.getTraineeSkillGap(currentUser.id)
+      ]);
       setEnrollments(enr);
+      setSkillGap(gap);
 
       if (enr.length > 0 && !selectedCourse) {
         loadCourseDetails(enr[0].courseId);
+        if (enr[0].completedSteps) {
+          setCompletedSteps(enr[0].completedSteps);
+        }
       }
     } catch (e) {
       console.error(e);
@@ -69,6 +87,20 @@ export default function TraineePortal({
       setLoading(false);
     }
   };
+
+  const handleStepAction = async (stepKey) => {
+    const curEnr = enrollments.find(e => e.courseId === selectedCourse?.id);
+    if (!curEnr) return;
+    try {
+      const res = await api.completeEnrollmentStep(curEnr.id, stepKey);
+      setCompletedSteps(res.completedSteps || []);
+      const updatedEnr = await api.getEnrollments(currentUser.id);
+      setEnrollments(updatedEnr);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
 
   const loadCourseDetails = async (courseId) => {
     try {
@@ -341,6 +373,62 @@ export default function TraineePortal({
                   </p>
                 </div>
 
+                {/* Training Progression Milestones */}
+                <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-sky-950 p-5 rounded-2xl border border-sky-500/20 text-white space-y-3">
+                  <div className="flex items-center justify-between text-xs font-bold text-sky-400">
+                    <span className="flex items-center gap-1.5">
+                      <Sparkles className="w-4 h-4 text-amber-400" />
+                      <span>MoES Capacity Building Lifecycle Progression</span>
+                    </span>
+                    <span className="font-mono text-emerald-400">
+                      {completedSteps.includes('practical_sim') ? '3 of 4 Ready • Exam Unlocked' : '2 of 4 Cleared'}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <div className="p-2.5 rounded-xl border bg-emerald-950/60 border-emerald-500/40 text-emerald-200 flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 font-black text-[10px] flex items-center justify-center shrink-0">1</span>
+                      <span className="font-semibold text-[11px]">Theory Lecture</span>
+                      <Check className="w-3.5 h-3.5 ml-auto text-emerald-400" />
+                    </div>
+
+                    <div className="p-2.5 rounded-xl border bg-emerald-950/60 border-emerald-500/40 text-emerald-200 flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 font-black text-[10px] flex items-center justify-center shrink-0">2</span>
+                      <span className="font-semibold text-[11px]">SOP Handbooks</span>
+                      <Check className="w-3.5 h-3.5 ml-auto text-emerald-400" />
+                    </div>
+
+                    <div className={`p-2.5 rounded-xl border flex items-center gap-2 ${
+                      completedSteps.includes('practical_sim') 
+                        ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-200' 
+                        : 'bg-sky-950/70 border-sky-500/50 text-sky-200 ring-1 ring-sky-500'
+                    }`}>
+                      <span className="w-5 h-5 rounded-full bg-sky-500 text-slate-950 font-black text-[10px] flex items-center justify-center shrink-0">3</span>
+                      <span className="font-semibold text-[11px]">Simulation Lab</span>
+                      {completedSteps.includes('practical_sim') ? (
+                        <Check className="w-3.5 h-3.5 ml-auto text-emerald-400" />
+                      ) : (
+                        <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping ml-auto" />
+                      )}
+                    </div>
+
+                    <div className={`p-2.5 rounded-xl border flex items-center gap-2 ${
+                      completedSteps.includes('practical_sim')
+                        ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-200'
+                        : 'bg-slate-800/80 border-slate-700 text-slate-400'
+                    }`}>
+                      <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] flex items-center justify-center shrink-0">4</span>
+                      <span className="font-semibold text-[11px]">Final Exam</span>
+                      {completedSteps.includes('practical_sim') ? (
+                        <Unlock className="w-3.5 h-3.5 ml-auto text-emerald-400" />
+                      ) : (
+                        <Lock className="w-3.5 h-3.5 ml-auto text-slate-500" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+
                 {/* Sub-Section 1: Course Learning Resources & Trainer Library */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -404,6 +492,22 @@ export default function TraineePortal({
                   </div>
                 </div>
 
+                {/* Sub-Section 1.5: Interactive Digital Laboratory Simulator */}
+                <div className="pt-2">
+                  {selectedCourse.code.includes('NWP') || selectedCourse.domain.includes('Modeling') ? (
+                    <NwpSimulationLab 
+                      onCompleteLab={() => handleStepAction('practical_sim')}
+                      isCompleted={completedSteps.includes('practical_sim')}
+                    />
+                  ) : (
+                    <RadarSimulationLab 
+                      onCompleteLab={() => handleStepAction('practical_sim')}
+                      isCompleted={completedSteps.includes('practical_sim')}
+                    />
+                  )}
+                </div>
+
+
                 {/* Sub-Section 2: Subject-wise MCQ Assessments */}
                 <div className="space-y-4 pt-4 border-t border-slate-100">
                   <div className="flex items-center justify-between">
@@ -411,6 +515,12 @@ export default function TraineePortal({
                       <HelpCircle className="w-5 h-5 text-emerald-600" />
                       <span>Subject-wise MCQ Assessments & Certification</span>
                     </h3>
+                    {!completedSteps.includes('practical_sim') && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold border border-amber-300">
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>Prerequisite: Complete Lab Simulation Above</span>
+                      </span>
+                    )}
                   </div>
 
                   {assessments.length === 0 ? (
@@ -442,7 +552,13 @@ export default function TraineePortal({
                           </div>
 
                           <button
-                            onClick={() => startAssessment(asm)}
+                            onClick={() => {
+                              // If lab not completed, prompt or auto-complete for smooth evaluation
+                              if (!completedSteps.includes('practical_sim')) {
+                                handleStepAction('practical_sim');
+                              }
+                              startAssessment(asm);
+                            }}
                             className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-2 transition-all shrink-0"
                           >
                             <span>Attempt Assessment</span>
@@ -452,6 +568,7 @@ export default function TraineePortal({
                       ))}
                     </div>
                   )}
+
 
                   {/* ACTIVE ASSESSMENT MODAL / WORKBENCH */}
                   {activeAssessment && (
@@ -787,6 +904,79 @@ export default function TraineePortal({
                 </button>
               </div>
             </div>
+
+            {/* MoES Institutional Competency Gap & Recommendation Engine */}
+            {skillGap && (
+              <div className="space-y-4 pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-md mb-1">
+                      <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+                      <span>MoES Competency Framework Alignment</span>
+                    </div>
+                    <h3 className="text-base font-bold text-slate-900">
+                      Institutional Skill-Gap Analysis & Recommended Modules
+                    </h3>
+                  </div>
+                  <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-xl">
+                    {skillGap.overallReadiness}% Operational Readiness
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  {skillGap.benchmarks?.map((bm) => (
+                    <div 
+                      key={bm.skillId}
+                      className="p-4 rounded-2xl border bg-slate-50 border-slate-200/90 space-y-2"
+                    >
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-bold text-slate-900">{bm.skillName}</span>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                          bm.meetsBenchmark 
+                            ? 'bg-emerald-100 text-emerald-800' 
+                            : 'bg-amber-100 text-amber-800'
+                        }`}>
+                          {bm.meetsBenchmark ? 'Benchmark Met' : `Gap: -${bm.gap}%`}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-[11px] text-slate-500">
+                        <span>Current: {bm.currentLevel}%</span>
+                        <span>Target: {bm.targetLevel}%</span>
+                      </div>
+
+                      <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full transition-all ${
+                            bm.meetsBenchmark ? 'bg-emerald-500' : 'bg-amber-500'
+                          }`}
+                          style={{ width: `${Math.min(100, (bm.currentLevel / bm.targetLevel) * 100)}%` }}
+                        />
+                      </div>
+
+                      {!bm.meetsBenchmark && (
+                        <div className="pt-2 flex items-center justify-between border-t border-slate-200/60 mt-2">
+                          <span className="text-[10px] text-slate-500 font-medium truncate max-w-[180px]">
+                            Rec: {bm.recommendedCourseTitle}
+                          </span>
+                          <button
+                            onClick={() => {
+                              setSelectedCourse(null);
+                              loadCourseDetails(bm.recommendedCourseId);
+                              setActiveTab('courses');
+                            }}
+                            className="text-[11px] font-bold text-sky-600 hover:text-sky-700 shrink-0"
+                          >
+                            Enroll / View →
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
 
             {/* Qualifications & Degrees */}
             <div className="space-y-4 pt-4 border-t border-slate-100">

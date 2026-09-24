@@ -457,13 +457,15 @@ export default function TrainerPortal({ currentUser, onRefreshData }) {
                 Track attempts, scores, and pass percentages across enrolled meteorological officers.
               </p>
             </div>
-            <button
-              onClick={() => alert('Exporting gradebook report as CSV / Excel format...')}
-              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-colors border border-slate-300"
+            <a
+              href={api.getGradebookExportUrl()}
+              download="MoES_Capacity_Gradebook.csv"
+              className="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-xl transition-colors border border-indigo-200 flex items-center gap-1.5 shadow-2xs"
             >
-              Export Gradebook (CSV)
-            </button>
+              <span>Download Official Gradebook (CSV)</span>
+            </a>
           </div>
+
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">

@@ -381,6 +381,31 @@ app.patch('/api/enrollments/:id/progress', (req, res) => {
   res.json({ success: true, enrollment: enr });
 });
 
+// Step Progression Engine: Prerequisite Check & Unlocking
+app.post('/api/enrollments/:id/step', (req, res) => {
+  const { id } = req.params;
+  const { stepKey } = req.body;
+  const data = db.get();
+  const enr = data.enrollments.find(e => e.id === id);
+  if (!enr) return res.status(404).json({ error: 'Enrollment not found' });
+
+  if (!enr.completedSteps) enr.completedSteps = ['lecture_video'];
+  if (stepKey && !enr.completedSteps.includes(stepKey)) {
+    enr.completedSteps.push(stepKey);
+  }
+
+  const milestones = ['lecture_video', 'notes_sop', 'practical_sim', 'assessment'];
+  const count = milestones.filter(s => enr.completedSteps.includes(s)).length;
+  enr.progress = Math.min(100, Math.max(enr.progress || 0, Math.round((count / milestones.length) * 100)));
+
+  // Exam unlocked once lecture and practical simulation are verified
+  const examUnlocked = enr.completedSteps.includes('lecture_video') && enr.completedSteps.includes('practical_sim');
+
+  db.save();
+  res.json({ success: true, enrollment: enr, examUnlocked, completedSteps: enr.completedSteps });
+});
+
+
 // ==========================================
 // 4. LEARNING MATERIALS & TRAINER LIBRARY
 // ==========================================
@@ -596,6 +621,39 @@ app.get('/api/submissions', (req, res) => {
   res.json(enriched);
 });
 
+// Export Gradebook to CSV
+app.get('/api/gradebook/export', (req, res) => {
+  const data = db.get();
+  const rows = [
+    ['Trainee Name', 'Email', 'Organization', 'Department', 'Course Code', 'Assessment Title', 'Score', 'Total Marks', 'Percentage', 'Status', 'Date']
+  ];
+
+  data.submissions.forEach(sub => {
+    const user = data.users.find(u => u.id === sub.traineeId);
+    const course = data.courses.find(c => c.id === sub.courseId);
+    const asm = data.assessments.find(a => a.id === sub.assessmentId);
+    rows.push([
+      `"${sub.traineeName || user?.name || 'Trainee'}"`,
+      `"${user?.email || ''}"`,
+      `"${user?.organization || 'MoES'}"`,
+      `"${user?.department || ''}"`,
+      `"${course?.code || ''}"`,
+      `"${asm?.title || 'Certification Assessment'}"`,
+      sub.score,
+      sub.totalMarks,
+      `"${sub.percentage}%"`,
+      `"${sub.passed ? 'PASSED' : 'RETAKE NEEDED'}"`,
+      `"${new Date(sub.submittedAt).toLocaleDateString()}"`
+    ]);
+  });
+
+  const csv = rows.map(r => r.join(',')).join('\n');
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename="MoES_Capacity_Gradebook.csv"');
+  res.send(csv);
+});
+
+
 // ==========================================
 // 6. CERTIFICATE VERIFICATION
 // ==========================================
@@ -808,6 +866,62 @@ app.patch('/api/competency/trainer/:trainerId', (req, res) => {
   db.save();
   res.json({ success: true, competency: tc });
 });
+
+// Trainee Institutional Skill-Gap Analysis Engine
+app.get('/api/competency/skill-gap/:traineeId', (req, res) => {
+  const { traineeId } = req.params;
+  const data = db.get();
+  const user = data.users.find(u => u.id === traineeId);
+  if (!user) return res.status(404).json({ error: 'Trainee not found' });
+
+  // Standard MoES Operational Competency Target Benchmarks
+  const benchmarks = [
+    { skillId: 'sk-rad', name: 'Doppler Radar Interpretation & Dual-Pol', target: 85, domain: 'Radar Meteorology', courseId: 'crs-101', courseTitle: 'Advanced Doppler Weather Radar (DWR) Calibration' },
+    { skillId: 'sk-nwp', name: 'WRF Model & High-Resolution NWP', target: 80, domain: 'Atmospheric Modeling', courseId: 'crs-202', courseTitle: 'Numerical Weather Prediction (NWP) Modeling' },
+    { skillId: 'sk-sat', name: 'Satellite Imagery & Cyclone Dvorak', target: 75, domain: 'Satellite Meteorology', courseId: 'crs-303', courseTitle: 'INSAT-3D/3DR Satellite Data Processing' },
+    { skillId: 'sk-ocn', name: 'Ocean Tsunami & Storm Surge Modeling', target: 70, domain: 'Ocean Science & Hazards', courseId: 'crs-501', courseTitle: 'Ocean Observation Systems & Tsunami Early Warning' }
+  ];
+
+  const userSkills = user.profile?.skills || [];
+  const analysis = benchmarks.map(bm => {
+    const found = userSkills.find(s => 
+      s.name.toLowerCase().includes('radar') && bm.skillId === 'sk-rad' ||
+      s.name.toLowerCase().includes('wrf') && bm.skillId === 'sk-nwp' ||
+      s.name.toLowerCase().includes('satellite') && bm.skillId === 'sk-sat' ||
+      s.name.toLowerCase().includes('ocean') && bm.skillId === 'sk-ocn' ||
+      s.name.toLowerCase().includes(bm.name.toLowerCase().split(' ')[0])
+    );
+    const current = found ? found.level : 45; // baseline assessment
+    const gap = Math.max(0, bm.target - current);
+    const meetsBenchmark = current >= bm.target;
+
+    return {
+      skillId: bm.skillId,
+      skillName: bm.name,
+      domain: bm.domain,
+      currentLevel: current,
+      targetLevel: bm.target,
+      gap,
+      meetsBenchmark,
+      recommendedCourseId: bm.courseId,
+      recommendedCourseTitle: bm.courseTitle
+    };
+  });
+
+  const overallReadiness = Math.round(
+    analysis.reduce((sum, a) => sum + (Math.min(a.targetLevel, a.currentLevel) / a.targetLevel) * 100, 0) / analysis.length
+  );
+
+  res.json({
+    traineeId,
+    traineeName: user.name,
+    organization: user.organization,
+    department: user.department,
+    overallReadiness: Math.min(100, overallReadiness),
+    benchmarks: analysis
+  });
+});
+
 
 // ==========================================
 // 10. ADMIN DASHBOARD METRICS

@@ -749,7 +749,11 @@
       "enrolledAt": "2026-08-01",
       "completedAt": "2026-09-24",
       "status": "completed",
-      "certificateId": "MOES-CC-2026-MET101-88492"
+      "certificateId": "MOES-CC-2026-MET101-88492",
+      "completedSteps": [
+        "lecture_video",
+        "practical_sim"
+      ]
     },
     {
       "id": "enr-2",

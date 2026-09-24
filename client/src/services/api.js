@@ -114,6 +114,23 @@ export const api = {
     return res.json();
   },
 
+  completeEnrollmentStep: async (enrollmentId, stepKey) => {
+    const res = await fetch(`${API_BASE}/enrollments/${enrollmentId}/step`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stepKey })
+    });
+    return res.json();
+  },
+
+  getTraineeSkillGap: async (traineeId) => {
+    const res = await fetch(`${API_BASE}/competency/skill-gap/${traineeId}`);
+    return res.json();
+  },
+
+  getGradebookExportUrl: () => `${API_BASE}/gradebook/export`,
+
+
   // Learning Materials
   getMaterials: async (courseId, trainerName) => {
     const params = new URLSearchParams();
